@@ -1,4 +1,5 @@
 from pyspark.sql import SparkSession
+from pyspark.sql import HiveContext
 from pyspark.sql.dataframe import DataFrame
 
 from airquality.jobs import entrypoint
@@ -22,14 +23,15 @@ def run(spark: SparkSession, environment: str, date: str):
     load_data(spark, transformed)
 
 
-def extract_data(spark: SparkSession, date: str) -> DataFrame:
+def extract_data(spark: SparkSession, date: str, database=f"airquality") -> DataFrame:
     """Load data from a source
 
     :param spark: Spark session object.
     :param date: The execution date as a string
     :return: Spark DataFrame.
     """
-    return spark.read.parquet(f"s3a://datafy-training/airquality/clean/{date}")
+    spark.catalog.setCurrentDatabase(database)
+    return spark.sql('SELECT * FROM airquality_clean')
 
 
 def transform_data(data: DataFrame, date: str) -> DataFrame:
