@@ -1,10 +1,10 @@
 docker:
   path: .
-id: 51edd65e-66eb-4bd6-af07-fda0731ce237
-name: openaq-dbt
+id: a29e17f2-05dc-4d74-9355-ff8f635a4f6c
+name: airquality
 resources:
   path: resources
-template: ""
+template: project/pyspark
 version: "0.2"
 workflows:
   path: dags
