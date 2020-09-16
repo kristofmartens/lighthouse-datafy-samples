@@ -16,7 +16,7 @@ default_args = {
 
 
 image = "{{ macros.image('airquality') }}"
-role = "datafy-dp-{{ macros.env() }}/eks-job-role-samples-{{ macros.env() }}"
+role = "datafy-dp-{{ macros.env() }}/spark-iam-role-glue-{{ macros.env() }}"
 
 dag = DAG(
     "airquality", default_args=default_args, schedule_interval="@daily", max_active_runs=1

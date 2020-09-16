@@ -10,3 +10,10 @@ def add_ds(date: str):
         return df.withColumn("ds", lit(actual_date))
 
     return inner
+
+
+def filter_by_country(country: str):
+    def inner(df: DataFrame):
+        return df.filter(df.country == country)
+
+    return inner

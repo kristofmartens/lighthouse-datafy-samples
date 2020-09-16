@@ -47,6 +47,7 @@ class ClosableSparkSession:
     def __init__(
         self,
         app_name: str,
+        enable_glue: bool = True,
         master: str = None,
         spark_config: dict = {},
     ):
