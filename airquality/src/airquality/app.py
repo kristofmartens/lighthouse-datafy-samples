@@ -5,7 +5,7 @@ from airquality.jobs import entrypoint
 
 # this import is required to discover the jobs
 # noinspection PyUnresolvedReferences
-from airquality.jobs import sample
+from airquality.jobs import ingest, clean, filter_belgium
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="airquality")

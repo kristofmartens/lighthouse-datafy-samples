@@ -8,7 +8,7 @@ from airquality.transformations.shared import add_ds, filter_by_country
 DataFrame.transform = transform
 
 
-@entrypoint("sample")
+@entrypoint("clean")
 def run(spark: SparkSession, environment: str, date: str):
     """Main ETL script definition.
 
@@ -19,7 +19,7 @@ def run(spark: SparkSession, environment: str, date: str):
     logger.info(f"Executing job for {environment} on {date}")
     data = extract_data(spark, date)
     transformed = transform_data(data, date)
-    load_data(spark, transformed)
+    load_data(spark, transformed, date)
 
 
 def extract_data(spark: SparkSession, date: str) -> DataFrame:
@@ -29,7 +29,7 @@ def extract_data(spark: SparkSession, date: str) -> DataFrame:
     :param date: The execution date as a string
     :return: Spark DataFrame.
     """
-    return spark.read.json(f"s3://openaq-fetches/realtime-gzipped/{date}")
+    return spark.read.json(f"s3a://datafy-training/airquality/raw/{date}")
 
 
 def transform_data(data: DataFrame, date: str) -> DataFrame:
@@ -39,10 +39,10 @@ def transform_data(data: DataFrame, date: str) -> DataFrame:
     :param date: The context date
     :return: Transformed DataFrame.
     """
-    return data.transform(add_ds(date)).transform(filter_by_country("BE"))
+    return data.transform(add_ds(date))
 
 
-def load_data(spark: SparkSession, data: DataFrame, database=f"airquality", path='s3a://datafy-training/airquality/'):
+def load_data(spark: SparkSession, data: DataFrame, date: str, database=f"airquality", path='s3a://datafy-training/airquality/clean'):
     """Writes the output dataset to some destination
 
     :param spark: the spark session
@@ -58,6 +58,5 @@ def load_data(spark: SparkSession, data: DataFrame, database=f"airquality", path
             .write
             .mode("overwrite")
             .format("parquet")
-            .partitionBy("ds")
-            .saveAsTable("airquality_pyspark", path=path)
+            .saveAsTable("airquality_clean", path=f"{path}/{date}")
     )
