@@ -57,6 +57,7 @@ def load_data(spark: SparkSession, data: DataFrame, database=f"airquality", path
         data.coalesce(1)
             .write
             .mode("overwrite")
+            .partitionBy("ds")
             .format("parquet")
             .saveAsTable("airquality_filtered", path=path)
     )
