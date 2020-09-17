@@ -1,5 +1,4 @@
 from pyspark.sql import SparkSession
-from pyspark.sql import HiveContext
 from pyspark.sql.dataframe import DataFrame
 
 from airquality.jobs import entrypoint

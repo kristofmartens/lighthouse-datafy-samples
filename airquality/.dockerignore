@@ -20,3 +20,5 @@ venv
 dags
 Dockerfile
 tests
+*.egg-info/
+
